@@ -9,7 +9,7 @@ const postSchema = new mongoose.Schema({
         },
     file:{
         type:Buffer,
-        required:false
+        required:false,
     },
     desc :
     {
