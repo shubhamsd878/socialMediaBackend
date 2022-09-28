@@ -5,7 +5,7 @@ const multer = require("multer")
 const posts = express.Router();
 
 const {GridFsStorage} = require('multer-gridfs-storage');
-const url = 'mongodb://localhost:27017/socialMedia1';
+const url = 'mongodb://localhost:27017/socialMedia';
 
 
 const storage = new GridFsStorage({ url });
