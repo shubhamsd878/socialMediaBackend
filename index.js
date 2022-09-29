@@ -20,6 +20,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true
   }))
+  
 app.set('view engine','ejs');
 app.set('views',__dirname+ '/views');
 
@@ -58,7 +59,7 @@ app.get( '/',(req,res)=>{
 })
 
 
-app.use(  '/err',(req,res,next)=>{
+app.use( '/err',(req,res,next)=>{
     res.send("something happened wrong with server . please try again..")
 })
 
