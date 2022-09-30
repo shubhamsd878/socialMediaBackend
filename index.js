@@ -4,7 +4,8 @@ const app = express();
 
 
 const authentication  = require('./routes/authentication')
-const posts = require('./routes/posts')
+// const posts = require('./routes/posts')
+const posts = require('./routes/post_formidable')
 
 
 const session = require("express-session")
@@ -63,6 +64,6 @@ app.use( '/err',(req,res,next)=>{
     res.send("something happened wrong with server . please try again..")
 })
 
-app.listen(8080,()=>{
+app.listen(3001,()=>{
     console.log('app is listening on port 8080');
 })

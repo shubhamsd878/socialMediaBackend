@@ -7,9 +7,16 @@ const postSchema = new mongoose.Schema({
     uid:{
         type:String,
         },
-    file:{
-        type:Buffer,
-        required:false,
+    // file:{
+    //     type:Buffer,
+    //     required:false,
+    // },
+
+    // file: Buffer,
+    file: {
+        file_name: String,
+        data: Buffer,
+        content_type: String
     },
     desc :
     {
@@ -25,8 +32,8 @@ const postSchema = new mongoose.Schema({
     })
    
 
-const postdata = new mongoose.model('postData',postSchema)
+module.exports = new mongoose.model('postData',postSchema)
 
-module.exports={
-    postdata,
-}
+// module.exports={
+//     postdata,
+// }
