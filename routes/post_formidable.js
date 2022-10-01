@@ -19,11 +19,14 @@ router.post('/', (req, res) =>{
             console.log("post route active")
             
             const file = req.files.postImage
-            // typeof file 
-            console.log(typeof file)
+
             // console.log(file)
             // console.log(file.path)
             // console.log(file.type)
+
+//2 ways to save file: 1 to save - name, binary, mimeType
+                    // 2 to save - whole file as in binary
+//================================================================================
 
             var img = fs.readFileSync(file.path)
             var binary_img = img.toString('base64')
@@ -36,8 +39,9 @@ router.post('/', (req, res) =>{
 
             post.file = final_img
 
-
-
+//================================================================================== 
+            // ****Not working*****
+            //Saving whole file at once 
             // post.file = file
 
             post.save(function(err, Person){
