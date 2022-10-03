@@ -41,8 +41,8 @@ const login = (req,res)=>{
     if(err)
     {
 
-        res.send(err)
         console.log(err);
+        res.send(err)
     }
     else
     {

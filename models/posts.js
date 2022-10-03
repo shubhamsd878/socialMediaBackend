@@ -8,7 +8,7 @@ const postSchema = new mongoose.Schema({
         type:String,
         },
     file:{
-        type:Buffer,
+        type:Binary,
         required:false,
     },
     desc :
@@ -18,8 +18,7 @@ const postSchema = new mongoose.Schema({
     },
     date_time:{
         type:Date,
-        default:Date.now(),
-            
+        default:Date.now()
     }
 
     })
