@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
     console.log("connected to db");
 }).catch( (e)=>{
     console.log("can't connect to db ");
-    console.log(e);
+    // console.log(e);
 });
 
 module.exports= mongoose;
