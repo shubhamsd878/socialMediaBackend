@@ -11,6 +11,8 @@ router.post('/', (req, res) =>{
     
     try {
         if( !req.files.postImage ){
+            console.log(req.files)
+            console.log('upload all files')
             return res.status(501).json({message : "upload all files"})
         }
         else{
