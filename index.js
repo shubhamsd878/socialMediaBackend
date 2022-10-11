@@ -60,8 +60,9 @@ app.get( '/',(req,res)=>{
 })
 
 
-app.use( '/err',(req,res,next)=>{
-    res.send("something happened wrong with server . please try again..")
+app.use( (err,req,res,next)=>{
+    // res.send("server broken by chance please wait we ar working..")
+    res.send(err)
 })
 
 app.listen(3001,()=>{
