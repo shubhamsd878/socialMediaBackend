@@ -1,68 +1,86 @@
-const router = require("express").Router()   
+const router = require("express").Router()
 let postSchema = require('../models/posts')
 const fs = require('fs')
 const formidable = require('express-formidable')
+const { nextTick } = require("process")
+const { default: mongoose } = require("mongoose")
+const jwt = require('jsonwebtoken')
+
+const jwt_secret = 'this is vipul, shubham secret'
 
 router.use(formidable({
-    multiples:true
+    multiples: true
 }))
 
-router.post('/', (req, res) =>{
+
+router.post("/add", (req, res, next) => {
+    const auth = req.headers.authtoken
+
+    // console.log('auth-token is: ' + auth)
+    // console.log('headers: ' + JSON.stringify(req.headers))
     
-    try {
-        if( !req.files.postImage ){
-            console.log(req.files)
-            console.log('upload all files')
-            return res.status(501).json({message : "upload all files"})
-        }
-        else{
-            console.log("post route active")
-            var post = new postSchema
-            console.log("post route active")
-            
-            const file = req.files.postImage
+    if(!auth){
+        console.log('no auth token')
+        return res.status(500).json({message : "Invalid User"})
+    }
 
-            // console.log(file)
-            // console.log(file.path)
-            // console.log(file.type)
+    const decoded = jwt.decode(auth, jwt_secret)
+    const uid = decoded.id
 
-//2 ways to save file: 1 to save - name, binary, mimeType
-                    // 2 to save - whole file as in binary
-//================================================================================
 
-            var img = fs.readFileSync(file.path)
-            var binary_img = img.toString('base64')
+    // now uid contains uid of the user sending file
+    // save file to the database with .status().json({status, message})
 
-            var final_img = {
-                file_name: file.name,
-                data : binary_img,
-                content_type : file.type
+
+    if( !req.files.file ){
+        console.log(req.files)
+        console.log('upload a file')
+        return res.status(501).json({message : "upload a file"})
+    }
+
+    if (req.files.file || (req.files.file && req.fields.desc) ) {
+        var img = fs.readFileSync(req.files.file.path,"base64")
+        let post = new postSchema({
+            uid:"raju",
+            pid:"raju123",
+            file:img,
+            desc:req.fields.desc,
+        });
+        post.save((err, data) => {
+            if (err) {
+                next(err)
             }
+            else {
+                res.send(data)
+            }
+        })
 
-            post.file = final_img
 
 //================================================================================== 
             // ****Not working*****
             //Saving whole file at once 
             // post.file = file
 
-            post.save(function(err, Person){
-                if(err){
-                    console.log('database error', err)
-                    return res.status(501).json({message: "Database error", type: "error"});
-                }
-                else{
-                    console.log('saved successfully')
-                    return res.status(200).json({message: " Successfully uploaded", type: "Success"});
-                }
-             });
-
-        }
-
-    } catch (error) {
-        console.log("something went wrong" + error)
     }
+    else {
+        next(err);
+    }
+})
 
-} )
+// for fetching file
+router.get("/fetch", (req, res) => {
+    postSchema.findOne({}, (err, data) => {
+        if (err) console.log(err);
+        else {
+            var img = new Buffer.from(data.file,"base64");
+            fs.writeFileSync('max.png',img)
+            res.send({
+                img:img,
+                desc:data.desc
+            })
+        }
+    })
+
+})
 
 module.exports = router
