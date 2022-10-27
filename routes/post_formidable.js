@@ -4,7 +4,10 @@ const fs = require('fs')
 const formidable = require('express-formidable')
 const { nextTick } = require("process")
 const { default: mongoose } = require("mongoose")
+
+ const postLikes = require('../models/likes')
 const jwt = require('jsonwebtoken')
+
 
 const jwt_secret = 'this is vipul, shubham secret'
 
@@ -45,6 +48,7 @@ router.post("/add", (req, res, next) => {
             pid:"raju123",
             file:img,
             desc:req.fields.desc,
+
         });
         post.save((err, data) => {
             if (err) {
@@ -69,18 +73,27 @@ router.post("/add", (req, res, next) => {
 
 // for fetching file
 router.get("/fetch", (req, res) => {
-    postSchema.findOne({}, (err, data) => {
+    postSchema.find({}, (err, data) => {
         if (err) console.log(err);
         else {
-            var img = new Buffer.from(data.file,"base64");
-            fs.writeFileSync('max.png',img)
-            res.send({
-                img:img,
-                desc:data.desc
+
+            // postLikes.postLikes.find({},(err,result)=>{
+            //     console.log("raju bhai");
+            // })
+
+            // var img = new Buffer.from(data.file,"base64");
+            // fs.writeFileSync('max.png',img)
+
+
+            res.status(200).send({
+                data:data
             })
         }
     })
 
 })
+
+
+router.post('/')
 
 module.exports = router
