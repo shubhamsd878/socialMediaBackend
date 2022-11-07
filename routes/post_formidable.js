@@ -19,8 +19,6 @@ router.use(formidable({
 router.post("/add", (req, res, next) => {
     const auth = req.headers.authtoken
 
-    // console.log('auth-token is: ' + auth)
-    // console.log('headers: ' + JSON.stringify(req.headers))
     
     if(!auth){
         console.log('no auth token')
@@ -76,7 +74,7 @@ router.get("/fetch", (req, res) => {
     postSchema.find({}, (err, data) => {
         if (err) console.log(err);
         else {
-
+            data.reverse()
             // postLikes.postLikes.find({},(err,result)=>{
             //     console.log("raju bhai");
             // })
@@ -84,15 +82,14 @@ router.get("/fetch", (req, res) => {
             // var img = new Buffer.from(data.file,"base64");
             // fs.writeFileSync('max.png',img)
 
-
-            res.status(200).send({
+            
+            res.status(200).json({
+                status: 200,
                 data:data
             })
         }
     })
-
 })
-
 
 router.post('/')
 

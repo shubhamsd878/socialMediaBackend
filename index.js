@@ -2,19 +2,15 @@ const { application } = require("express");
 const express = require("express")
 const app = express();
 const cors = require('cors')
+const session = require("express-session")
 
 app.use(cors())
 
 
 const authentication  = require('./routes/authentication')
-// const posts = require('./routes/posts')
 const posts = require('./routes/post_formidable')
-
-
-const session = require("express-session")
-
-const postSchema = require('./models/posts');
-const { post } = require("./routes/authentication");
+// const { post } = require("./routes/authentication");
+const following = require("./routes/following");
 
 
 app.set('trust proxy', 1) // trust first proxy
@@ -34,6 +30,7 @@ app.use(express.urlencoded({extended:true}))
 
 app.use('/authentication',authentication)
 app.use('/posts',posts);
+app.use('/follow',following )
 
 
 
