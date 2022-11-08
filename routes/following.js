@@ -1,10 +1,17 @@
+// Shubham - friend and unfriend routes are working Correctly
 const router = require('express').Router()
+const formidable = require('express-formidable')
 const jwt = require('jsonwebtoken')
+
 const followingModel = require('../models/followingModel')
 
 const jwt_secret = 'this is vipul, shubham secret'
 
 
+router.use(formidable({
+    multiples: true
+}))
+// ************************************ route.post ************************************
 router.post('/', async (req,res) => {
     const auth = req.headers.authtoken
     
@@ -48,6 +55,8 @@ router.post('/', async (req,res) => {
 })
 
 
+
+// ************************************ route.delete ************************************
 router.delete('/', (req,res) => {
     const auth = req.headers.authtoken
     

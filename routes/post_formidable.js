@@ -2,11 +2,9 @@ const router = require("express").Router()
 let postSchema = require('../models/posts')
 const fs = require('fs')
 const formidable = require('express-formidable')
-const { nextTick } = require("process")
-const { default: mongoose } = require("mongoose")
-
- const postLikes = require('../models/likes')
 const jwt = require('jsonwebtoken')
+
+const postLikes = require('../models/likes')
 
 
 const jwt_secret = 'this is vipul, shubham secret'
@@ -42,8 +40,8 @@ router.post("/add", (req, res, next) => {
     if (req.files.file || (req.files.file && req.fields.desc) ) {
         var img = fs.readFileSync(req.files.file.path,"base64")
         let post = new postSchema({
-            uid:"raju",
-            pid:"raju123",
+            // pid:"raju123",
+            uid: uid,
             file:img,
             desc:req.fields.desc,
 
@@ -53,7 +51,7 @@ router.post("/add", (req, res, next) => {
                 next(err)
             }
             else {
-                res.send(data)
+                res.status(200).json({message:'post saved successfully'})
             }
         })
 

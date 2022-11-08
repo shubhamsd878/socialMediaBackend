@@ -11,6 +11,8 @@ const authentication  = require('./routes/authentication')
 const posts = require('./routes/post_formidable')
 // const { post } = require("./routes/authentication");
 const following = require("./routes/following");
+const searchUser = require("./routes/searchUser");
+const userDetails = require('./routes/userDetails')
 
 
 app.set('trust proxy', 1) // trust first proxy
@@ -31,6 +33,8 @@ app.use(express.urlencoded({extended:true}))
 app.use('/authentication',authentication)
 app.use('/posts',posts);
 app.use('/follow',following )
+app.use('/search',searchUser )
+app.use('/userDetails', userDetails )
 
 
 
