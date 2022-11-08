@@ -1,5 +1,5 @@
-// check whether profile updated or not in database
-// wrong logic, problem is I mistakenly made the _id = objectId by upserting 
+// Shubham: check whether profile updated or not in database
+// Shubham: anaysis if it's a problem -- wrong logic, problem is I mistakenly made the _id = objectId by upserting 
 
 const router = require('express').Router()
 const formidable = require('express-formidable')
@@ -15,6 +15,7 @@ router.use(formidable({
 }))
 
 
+// -------------------------------------------------------------------------------------------------------
 router.get('/', async(req, res)=> {
     const auth = req.headers.authtoken
 
@@ -36,6 +37,7 @@ router.get('/', async(req, res)=> {
 })
 
 
+// -------------------------------------------------------------------------------------------------------
 router.put('/profilePic', async (req, res) => {
     const auth = req.headers.authtoken
 
@@ -78,6 +80,8 @@ router.put('/profilePic', async (req, res) => {
 })
 
 
+
+// -------------------------------------------------------------------------------------------------------
 
 router.put('/coverPic', async (req, res) => {
     const auth = req.headers.authtoken
@@ -123,7 +127,7 @@ router.put('/coverPic', async (req, res) => {
 
 
 
-
+// -------------------------------------------------------------------------------------------------------
 router.put('/description', async (req, res) => {
     const auth = req.headers.authtoken
 

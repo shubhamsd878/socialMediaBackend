@@ -5,6 +5,7 @@ const formidable = require('express-formidable')
 const jwt = require('jsonwebtoken')
 
 const postLikes = require('../models/likes')
+const followingModel = require("../models/followingModel")
 
 
 const jwt_secret = 'this is vipul, shubham secret'
@@ -68,24 +69,62 @@ router.post("/add", (req, res, next) => {
 })
 
 // for fetching file
-router.get("/fetch", (req, res) => {
-    postSchema.find({}, (err, data) => {
-        if (err) console.log(err);
-        else {
-            data.reverse()
-            // postLikes.postLikes.find({},(err,result)=>{
-            //     console.log("raju bhai");
-            // })
+router.get("/fetch", async(req, res) => {
+    const auth = req.headers.authtoken
 
-            // var img = new Buffer.from(data.file,"base64");
-            // fs.writeFileSync('max.png',img)
+    
+    if(!auth){
+        console.log('no auth token')
+        return res.status(500).json({message : "Invalid User"})
+    }
+
+    const decoded = jwt.decode(auth, jwt_secret)
+    const uid = decoded.id
+
+    // postSchema.find({}, (err, data) => {
+    //     if (err) console.log(err);
+    //     else {
+    //         data.reverse()
+    //         // data = data.populate('users')
+    //         // postLikes.postLikes.find({},(err,result)=>{
+    //         //     console.log("raju bhai");
+    //         // })
+
+    //         // var img = new Buffer.from(data.file,"base64");
+    //         // fs.writeFileSync('max.png',img)
 
             
-            res.status(200).json({
-                status: 200,
-                data:data
-            })
-        }
+    //         res.status(200).json({
+    //             status: 200,
+    //             data
+    //         })
+    //     }
+    // })
+
+
+    // -----------------------------------------------------------
+    let followingArr = await followingModel.find({uid}, 'following -_id').catch(err => {
+        console.log('something went wrong in followingArr', err)
+    })
+
+    console.log( followingArr)
+    followingArr = followingArr[0].following
+    console.log( typeof(followingArr))
+    console.log( followingArr)
+
+    
+    // 
+    // let result = await postSchema.find({})
+    let result = await postSchema.find({uid: {$in: followingArr}}, "-file")
+        .populate('uid', '_id name')
+        .catch(error => {
+            return res.status(500).json({message: 'something went wrong', err})
+        })
+
+    // console.log(result)
+    res.status(200).json({
+        status: 200,
+        result
     })
 })
 

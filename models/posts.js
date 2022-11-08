@@ -1,10 +1,14 @@
 const mongoose = require('mongoose')
 
-const conn = require('../config/db')
+// const conn = require('../config/db')
+const user = require('./users')
 const { post } = require('../routes/authentication')
 const postSchema = new mongoose.Schema({
-    uid:String,
-    pid:String,
+    uid: {
+        type:mongoose.Types.ObjectId,
+        ref: 'userdata'
+    },
+    pid: mongoose.Types.ObjectId,
     file:String,
     desc:String,
     date:{
