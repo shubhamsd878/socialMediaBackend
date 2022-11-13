@@ -2,8 +2,9 @@ const mongoose = require('mongoose')
 
 const userDetailSchema = mongoose.Schema({
     uid: mongoose.Types.ObjectId,
-    profilePic: Buffer,
-    coverPic: Buffer,
+    // name: uid, 
+    profilePic: String,
+    coverPic: String,
     description: String
 })
 

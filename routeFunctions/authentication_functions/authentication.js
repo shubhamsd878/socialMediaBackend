@@ -68,7 +68,7 @@ const login = (req, res) => {
                         const token = jwt.sign(data, jwt_secret)
                         console.log('token is: ',token )
 
-                        res.status(200).json({ status: 200, message:'succesful sign in', token})
+                        res.status(200).json({ status: 200, message:'succesful sign in', token, uid: result._id})
 
                         // req.session.user = req.body.username;
                         // const data = 

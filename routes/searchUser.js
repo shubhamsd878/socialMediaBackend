@@ -2,9 +2,9 @@
 const router = require('express').Router()
 const users = require('../models/users')
 
-router.get('/', (req, res)=> {
+router.get('/', (req, res)=> { 
 
-    let a = req.body.query
+    let a = req.headers.query
     // users.find( { name: a } || { email: a}, (err, response)=> {
     
     users.find( { name: { $regex : new RegExp(a, "i") } } || { email: { $regex : new RegExp(a, "i") } }, (err, response)=> {

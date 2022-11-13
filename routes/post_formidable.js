@@ -68,13 +68,13 @@ router.post("/add", (req, res, next) => {
     }
 })
 
-// for fetching file
+// for fetching file of following
 router.get("/fetch", async(req, res) => {
     const auth = req.headers.authtoken
 
     
     if(!auth){
-        console.log('no auth token')
+        console.log('no auth token from ')
         return res.status(500).json({message : "Invalid User"})
     }
 
@@ -107,17 +107,14 @@ router.get("/fetch", async(req, res) => {
         console.log('something went wrong in followingArr', err)
     })
 
-    console.log( followingArr)
     followingArr = followingArr[0].following
-    console.log( typeof(followingArr))
-    console.log( followingArr)
-
     
-    // 
-    // let result = await postSchema.find({})
-    let result = await postSchema.find({uid: {$in: followingArr}}, "-file")
+    // -----------------------------------------------------------
+
+    // let result = await postSchema.find({uid: {$in: followingArr}} )
+    let result = await postSchema.find({uid: {$in: followingArr}}, {}, {sort: {date: -1}} )
         .populate('uid', '_id name')
-        .catch(error => {
+        .catch(err => {
             return res.status(500).json({message: 'something went wrong', err})
         })
 
@@ -128,6 +125,37 @@ router.get("/fetch", async(req, res) => {
     })
 })
 
-router.post('/')
+
+// for fetching file of current
+router.get("/fetchcurrent", async(req, res) => {
+    // const auth = req.headers.authtoken
+
+    
+    // if(!auth){
+    //     console.log('no auth token from ')
+    //     return res.status(500).json({message : "Invalid User"})
+    // }
+
+    // const decoded = jwt.decode(auth, jwt_secret)
+    // const uid = decoded.id
+
+    const targetUid = req.headers.uid
+
+    // let result = await postSchema.find({uid: {$in: followingArr}} )
+    let result = await postSchema.find({uid: targetUid}, {}, {sort: {date: -1}} )
+        .populate('uid', '_id name')
+        .catch(err => {
+            return res.status(500).json({message: 'something went wrong', err})
+        })
+
+    // console.log(result)
+    res.status(200).json({
+        status: 200,
+        result
+    })
+})
+
+
+
 
 module.exports = router

@@ -16,25 +16,64 @@ router.use(formidable({
 
 
 // -------------------------------------------------------------------------------------------------------
-router.get('/', async(req, res)=> {
-    const auth = req.headers.authtoken
+// ************   GET Routes **************
 
-    if (!auth) {
-        console.log('no auth token')
-        return res.status(500).json({ message: "Invalid User" })
-    }
+// -------------------------------------------------------------------------------------------------------
+router.get('/coverPic', (req, res) => {
+    
+    console.log('hii')
+    
+    const targetUid = req.headers.uid
+    console.log("hii from get cover, uid: ", targetUid)
+    if( !targetUid) return res.status(400).json({message:'no target uid'})
+    userDetails.findById(targetUid, 'coverPic -_id', (err, response) => {
+        if (err) return res.status(500).json({ message: 'something went wrong', err })
 
-    const decoded = await jwt.decode(auth, jwt_secret)
-    const uid = decoded.id
-
-    userDetails.findById(uid,  (err, response) => {
-        if(err) return res.status(500).json({message:'something went wrong', err})
-
-        return res.status(200).json({message: 'fetch successful', response: response })
+        return res.status(200).json({ message: 'fetch successful', response: response })
     })
 
-
 })
+
+
+// -------------------------------------------------------------------------------------------------------
+router.get('/profilePic', async (req, res) => {
+
+    const targetUid = req.headers.uid
+    if(!targetUid){
+        console.log('no target uid')
+        return res.status(400).json({message: 'no targetUid'})
+    } 
+    userDetails.find({_id: targetUid}, 'profilePic -_id', (err, response) => {
+        if (err) return res.status(500).json({ message: 'something went wrong', err })
+
+        return res.status(200).json({ message: 'fetch successful', response: response })
+    })
+})
+
+
+// -------------------------------------------------------------------------------------------------------
+router.get('/description', async (req, res) => {
+    // const auth = req.headers.authtoken
+
+    // if (!auth) {
+    //     console.log('no auth token')
+    //     return res.status(500).json({ message: "Invalid User" })
+    // }
+
+    // const decoded = await jwt.decode(auth, jwt_secret)
+    // const uid = decoded.id
+
+    const targetUid = req.headers.uid
+
+    userDetails.findById(targetUid, 'description -_id', (err, response) => {
+        if (err) return res.status(500).json({ message: 'something went wrong', err })
+
+        return res.status(200).json({ message: 'fetch successful', response: response })
+    })
+})
+
+
+
 
 
 // -------------------------------------------------------------------------------------------------------
@@ -78,6 +117,10 @@ router.put('/profilePic', async (req, res) => {
     
 
 })
+
+
+
+
 
 
 
