@@ -1,5 +1,6 @@
 const { Schema } = require('mongoose');
 const userModel = require('../../models/users')
+const namesModel = require('../../models/names')
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 var session = require('express-session')
@@ -15,19 +16,43 @@ const sign_up = (req, res) => {
     bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
         var data = new userModel({
             _id: new mongoose.Types.ObjectId,
-            name: req.body.name,
+            // name: req.body.name,
             email: req.body.email,
             password: hash,
         })
 
+
+        // logic to save names in another table: 
+        // first save user data, if(success) then save name in another table with same id, if(success) then update the name column of userTable 
         data.save((err, result) => {
             if (err) {
                 console.log(err);
                 res.status(404).json({ status: 404, message: 'something went wrong' })
             }
             else {
-                console.log('name= ' + req.body.name + ", email: " + req.body.email + ', password: ' + req.body.password)
-                res.status(200).json({ status: 200, message: result })
+                // --saving name--
+                var name = new namesModel({
+                    _id: result._id,
+                    name: req.body.name
+                })
+                name.save((err, nameresult) => {
+                    if(err){
+                        console.log('something went wrong during saving name, err: ', err)
+                        return res.status(500).json({message: 'something went wrong', err})
+                    }
+
+                    else{
+                        console.log('nameresult: ', nameresult)
+                        userModel.findByIdAndUpdate(result._id, {name: nameresult._id}, {upsert: true},(err, resUserNameUpdate) => {
+                            if(err) return res.status(500).json({message: 'something went wrong', err})
+
+                            console.log('result: ' + '')
+                            res.status(200).json({ status: 200, message: resUserNameUpdate })
+                        })
+                    }
+                })
+
+
             }
 
         })

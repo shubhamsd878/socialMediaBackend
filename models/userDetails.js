@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 
 const userDetailSchema = mongoose.Schema({
     uid: mongoose.Types.ObjectId,
-    // name: uid, 
     profilePic: String,
     coverPic: String,
     description: String

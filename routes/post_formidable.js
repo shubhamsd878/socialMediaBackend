@@ -18,7 +18,7 @@ router.use(formidable({
 router.post("/add", (req, res, next) => {
     const auth = req.headers.authtoken
 
-    
+
     if(!auth){
         console.log('no auth token')
         return res.status(500).json({message : "Invalid User"})

@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken')
 const fs = require('fs')
 
 const userDetails = require('../models/userDetails')
+const names = require('../models/names')
 const jwt_secret = 'this is vipul, shubham secret'
 
 
@@ -17,6 +18,19 @@ router.use(formidable({
 
 // -------------------------------------------------------------------------------------------------------
 // ************   GET Routes **************
+
+router.get('/name', (req, res) => {
+    const uid = req.headers.uid
+    if(!uid) return res.status(500).json({message:'no uid'})
+
+    names.findById(uid, (err, result)=> {
+        if(err) return res.status(500).json({message:'something went wrong', err})
+
+        res.status(200).json({message:'success', result})
+    })
+
+})
+
 
 // -------------------------------------------------------------------------------------------------------
 router.get('/coverPic', (req, res) => {
