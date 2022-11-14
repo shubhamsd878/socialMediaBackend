@@ -113,7 +113,7 @@ router.get("/fetch", async(req, res) => {
 
     // let result = await postSchema.find({uid: {$in: followingArr}} )
     let result = await postSchema.find({uid: {$in: followingArr}}, {}, {sort: {date: -1}} )
-        .populate('uid', '_id name')
+        .populate('uid', '_id name email')
         .catch(err => {
             return res.status(500).json({message: 'something went wrong', err})
         })

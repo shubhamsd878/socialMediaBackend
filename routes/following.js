@@ -29,6 +29,8 @@ router.get('/', async (req, res) => {
         console.log('targetUid: ', targetUid)
 
         console.log('response ',response)
+        if(!response[0] ) return res.status(201).json({message: 'no, both are not friends', isFollowing: false})
+
         let followingArr = response[0].following
 
         console.log('followingArr: ', followingArr)
