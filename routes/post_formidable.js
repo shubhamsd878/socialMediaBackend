@@ -1,3 +1,4 @@
+// not fetching according to date
 const router = require("express").Router()
 let postSchema = require('../models/posts')
 const fs = require('fs')
@@ -68,6 +69,7 @@ router.post("/add", (req, res, next) => {
     }
 })
 
+
 // for fetching file of following
 router.get("/fetch", async(req, res) => {
     const auth = req.headers.authtoken
@@ -81,25 +83,6 @@ router.get("/fetch", async(req, res) => {
     const decoded = jwt.decode(auth, jwt_secret)
     const uid = decoded.id
 
-    // postSchema.find({}, (err, data) => {
-    //     if (err) console.log(err);
-    //     else {
-    //         data.reverse()
-    //         // data = data.populate('users')
-    //         // postLikes.postLikes.find({},(err,result)=>{
-    //         //     console.log("raju bhai");
-    //         // })
-
-    //         // var img = new Buffer.from(data.file,"base64");
-    //         // fs.writeFileSync('max.png',img)
-
-            
-    //         res.status(200).json({
-    //             status: 200,
-    //             data
-    //         })
-    //     }
-    // })
 
 
     // -----------------------------------------------------------
@@ -113,7 +96,10 @@ router.get("/fetch", async(req, res) => {
 
     // let result = await postSchema.find({uid: {$in: followingArr}} )
     let result = await postSchema.find({uid: {$in: followingArr}}, {}, {sort: {date: -1}} )
-        .populate('uid', '_id name email')
+    .populate({ path: 'uid', populate: {path: 'name'}})
+
+        // .populate('uid', '_id name email')
+        // .populate('name', '-_id name')
         .catch(err => {
             return res.status(500).json({message: 'something went wrong', err})
         })
@@ -143,7 +129,10 @@ router.get("/fetchcurrent", async(req, res) => {
 
     // let result = await postSchema.find({uid: {$in: followingArr}} )
     let result = await postSchema.find({uid: targetUid}, {}, {sort: {date: -1}} )
-        .populate('uid', '_id name')
+        .populate({ path: 'uid', populate: {path: 'name'}})
+
+        // .populate('uid', '_id name')
+        // .populate('name', '-_id name')
         .catch(err => {
             return res.status(500).json({message: 'something went wrong', err})
         })

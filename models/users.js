@@ -3,10 +3,8 @@ const mongoose = require("mongoose")
 const conn= require("../config/db")
 
 var userSchema = new mongoose.Schema( {
-    name: {
-        type: mongoose.Types.ObjectId,
-        ref: 'names'
-    },
+ 
+    name: String,
     email:String,
     password:String,
 },{

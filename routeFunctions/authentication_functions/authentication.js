@@ -16,7 +16,7 @@ const sign_up = (req, res) => {
     bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
         var data = new userModel({
             _id: new mongoose.Types.ObjectId,
-            // name: req.body.name,
+            name: req.body.name,
             email: req.body.email,
             password: hash,
         })
@@ -42,13 +42,15 @@ const sign_up = (req, res) => {
                     }
 
                     else{
-                        console.log('nameresult: ', nameresult)
-                        userModel.findByIdAndUpdate(result._id, {name: nameresult._id}, {upsert: true},(err, resUserNameUpdate) => {
-                            if(err) return res.status(500).json({message: 'something went wrong', err})
+                        // console.log('nameresult: ', nameresult)
+                        // userModel.findByIdAndUpdate(result._id, {name: nameresult._id}, {upsert: true},(err, resUserNameUpdate) => {
+                        //     if(err) return res.status(500).json({message: 'something went wrong', err})
 
-                            console.log('result: ' + '')
-                            res.status(200).json({ status: 200, message: resUserNameUpdate })
-                        })
+                        //     console.log('result: ' + '')
+                        //     res.status(200).json({ status: 200, message: resUserNameUpdate })
+                        // })
+                        res.status(200).json({ message:'success signUp', result })
+                        
                     }
                 })
 

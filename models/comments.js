@@ -3,8 +3,11 @@ const mongoose = require('mongoose')
 const commentSchema = mongoose.Schema({
     pid: mongoose.Types.ObjectId,
     uid: mongoose.Types.ObjectId,
-    Comment: String,
-    time: {
+    comment:{
+        type: String,
+        required: true
+    },
+    date: {
         type: Date,
         default: Date.now()
     }
