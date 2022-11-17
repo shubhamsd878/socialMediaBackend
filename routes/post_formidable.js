@@ -39,13 +39,15 @@ router.post("/add", (req, res, next) => {
         return res.status(501).json({message : "upload a file"})
     }
 
+    const date = new Date()
+
     if (req.files.file || (req.files.file && req.fields.desc) ) {
         var img = fs.readFileSync(req.files.file.path,"base64")
         let post = new postSchema({
-            // pid:"raju123",
             uid: uid,
             file:img,
             desc:req.fields.desc,
+            date: date
 
         });
         post.save((err, data) => {
@@ -103,8 +105,15 @@ router.get("/fetch", async(req, res) => {
         }
 
 
+        return res.status(500).json({message:'something went wrong',err})
     })
 
+    console.log('followingArr: ', !followingArr)
+    if(!followingArr ) return res.status(200).json({message:'no friends of user'})
+
+    
+    followingArr = followingArr[0].following
+    if(followingArr.length == 0) return res.status(200).json({message:'no friends of user',})
     
     // -----------------------------------------------------------
 

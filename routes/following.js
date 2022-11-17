@@ -78,7 +78,7 @@ router.post('/', async (req,res) => {
             if( err ) return res.status(500).json({message: 'something went wrong', err})
             else{
                 console.log(`now ${uid} is following ${targetUid} \n`, response)
-                return res.status(200).json({message:`now ${uid} is following ${targetUid}`})
+                return res.status(200).json({status:200, message:`now ${uid} is following ${targetUid}`})
             }
         })
     // })
@@ -124,7 +124,7 @@ router.delete('/', (req,res) => {
             if( err ) return res.status(500).json({message: 'something went wrong', err})
             else{
                 console.log(`now ${uid} unfollowed ${targetUid} \n`, response)
-                return res.status(200).json({message:`now ${uid} is unfollowed ${targetUid} `})
+                return res.status(200).json({status:200, message:`now ${uid} is unfollowed ${targetUid} `})
             }
         })
     // })

@@ -2,7 +2,10 @@ const mongoose = require('mongoose')
 
 const commentSchema = mongoose.Schema({
     pid: mongoose.Types.ObjectId,
-    uid: mongoose.Types.ObjectId,
+    uid: {
+        type: mongoose.Types.ObjectId,
+        ref: 'names'
+    },
     comment:{
         type: String,
         required: true
