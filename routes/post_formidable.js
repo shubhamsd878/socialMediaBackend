@@ -86,29 +86,58 @@ router.get("/fetch", async(req, res) => {
 
 
     // -----------------------------------------------------------
-    let followingArr = await followingModel.find({uid}, 'following -_id').catch(err => {
-        console.log('something went wrong in followingArr', err)
+    let followingArr
+    await followingModel.find({uid}).then( (data,err)=>{
+        if(err)
+        {
+            console.log('something went wrong in followingArr', err)
+        }
+        else
+        {
+            console.log(data);
+            if(data.length)
+            {
+                followingArr = data[0].following
+            }
+
+        }
+
+
     })
 
-    followingArr = followingArr[0].following
     
     // -----------------------------------------------------------
 
     // let result = await postSchema.find({uid: {$in: followingArr}} )
     let result = await postSchema.find({uid: {$in: followingArr}}, {}, {sort: {date: -1}} )
-    .populate({ path: 'uid', populate: {path: 'name'}})
+    .populate({ path: 'uid', populate: {path: 'name'}}).then( (data,err)=>{
+        if(err)
+        {
+            return res.status(500).json({message: 'something went wrong', err})
+        }
+        else{
+            if(data.length)
+            {
+
+                
+                console.log(data);
+                res.status(200).json({
+                    status:200,
+                })
+            }
+        }
+
+
+    })
 
         // .populate('uid', '_id name email')
         // .populate('name', '-_id name')
-        .catch(err => {
-            return res.status(500).json({message: 'something went wrong', err})
-        })
-
+        
     // console.log(result)
-    res.status(200).json({
-        status: 200,
-        result
-    })
+    // res.status(200).json({
+    //     status: 200,
+    //     result
+    // })
 })
 
 
