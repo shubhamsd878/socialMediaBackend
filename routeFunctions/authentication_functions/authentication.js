@@ -74,7 +74,7 @@ function isAuthenticated(req, res, next) {
 const login = (req, res) => {
     const {email, password } = req.body;
     // console.log('email: ' + req.body.email + '\npassword: ' + req.body.password)
-    console.log('email: ' + email + '\npassword: ' + password)
+    // console.log('email: ' + email + '\npassword: ' + password)
 
     userModel.findOne({ 'email': req.body.email }, (err, result) => {
         if (err) {
@@ -90,10 +90,10 @@ const login = (req, res) => {
                             id: result._id,
                             password: result.password
                         }
-                        console.log(data)
+                        // console.log(data)
 
                         const token = jwt.sign(data, jwt_secret)
-                        console.log('token is: ',token )
+                        // console.log('token is: ',token )
 
                         res.status(200).json({ status: 200, message:'succesful sign in', token, uid: result._id})
 
@@ -113,7 +113,7 @@ const login = (req, res) => {
 
             }
             else {
-                console.log('user not found with email: ' + req.body.email)
+                // console.log('user not found with email: ' + req.body.email)
                 res.status(400).json({ message: 'user not found' })
             }
         }

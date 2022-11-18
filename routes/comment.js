@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
     const auth = req.headers.authtoken
 
     if(!auth){
-        console.log('no auth token')
+        // console.log('no auth token')
         return res.status(500).json({message : "Invalid User"})
     }
 
@@ -40,7 +40,7 @@ router.post('/', (req, res) => {
     const textComment = req.headers.comment;
 
     let date = new Date()
-    console.log(date)
+    // console.log(date)
     
     const newComment = comments({
         pid: pid,
@@ -53,7 +53,7 @@ router.post('/', (req, res) => {
     newComment.save( (err, resp) => {
         if( err) return res.status(500).json({messge: 'something went wrong', err})
 
-        console.log('resp: ', resp)
+        // console.log('resp: ', resp)
         return res.status(200).json({message: 'comment added successfully'})
     })
 

@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     var auth = req.headers.authtoken
     
     if(!auth){
-        console.log('no auth token')
+        // console.log('no auth token')
         return res.status(400).json({message : "Invalid User"})
     }
 
@@ -25,16 +25,16 @@ router.get('/', async (req, res) => {
     followingModel.find({uid: uid}, (err, response) => {
         if(err) return res.status(500).json({message:"something went wrong", err})
 
-        console.log('uid: ', uid)
-        console.log('targetUid: ', targetUid)
+        // console.log('uid: ', uid)
+        // console.log('targetUid: ', targetUid)
 
-        console.log('response ',response)
+        // console.log('response ',response)
         if(!response[0] ) return res.status(201).json({message: 'no, both are not friends', isFollowing: false})
 
         let followingArr = response[0].following
 
-        console.log('followingArr: ', followingArr)
-        console.log('followingArr.includes(targetUid): ', followingArr.includes(targetUid))
+        // console.log('followingArr: ', followingArr)
+        // console.log('followingArr.includes(targetUid): ', followingArr.includes(targetUid))
 
         if(followingArr.includes(targetUid)){
             return res.status(200).json({message:'yes, both are friends', isFollowing:true })
@@ -50,9 +50,9 @@ router.get('/', async (req, res) => {
 router.post('/', async (req,res) => {
     var auth = req.headers.authtoken
     
-    console.log(req.headers)
+    // console.log(req.headers)
     if(!auth){
-        console.log('no auth token')
+        // console.log('no auth token')
         return res.status(400).json({message : "Invalid Userno authtoken"})
     }
 
@@ -77,7 +77,7 @@ router.post('/', async (req,res) => {
         }, {upsert: true}, (err, response)=>{
             if( err ) return res.status(500).json({message: 'something went wrong', err})
             else{
-                console.log(`now ${uid} is following ${targetUid} \n`, response)
+                // console.log(`now ${uid} is following ${targetUid} \n`, response)
                 return res.status(200).json({status:200, message:`now ${uid} is following ${targetUid}`})
             }
         })
@@ -97,7 +97,7 @@ router.delete('/', (req,res) => {
     const auth = req.headers.authtoken
     
     if(!auth){
-        console.log('no auth token')
+        // console.log('no auth token')
         return res.status(500).json({message : "Invalid User, no authtoken"})
     }
 
@@ -123,7 +123,7 @@ router.delete('/', (req,res) => {
         }, {upsert: true}, (err, response)=>{
             if( err ) return res.status(500).json({message: 'something went wrong', err})
             else{
-                console.log(`now ${uid} unfollowed ${targetUid} \n`, response)
+                // console.log(`now ${uid} unfollowed ${targetUid} \n`, response)
                 return res.status(200).json({status:200, message:`now ${uid} is unfollowed ${targetUid} `})
             }
         })
