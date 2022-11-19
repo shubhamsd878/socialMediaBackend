@@ -132,21 +132,19 @@ router.get("/fetch", async(req, res) => {
 
 // for fetching file of current
 router.get("/fetchcurrent", async(req, res) => {
-    // const auth = req.headers.authtoken
-
-    
-    // if(!auth){
-        // console.log('no auth token from ')
-    //     return res.status(500).json({message : "Invalid User"})
-    // }
-
-    // const decoded = jwt.decode(auth, jwt_secret)
-    // const uid = decoded.id
 
     const targetUid = req.headers.uid
+    const skip = req.headers.skip
+    const limit = req.headers.limit
 
-    // let result = await postSchema.find({uid: {$in: followingArr}} )
+    let totalResult = await postSchema.count({uid: targetUid} )
+        .catch(err => {
+            return res.status(500).json({message: 'something went wrong', err})
+        }) 
+
     let result = await postSchema.find({uid: targetUid}, {}, {sort: {date: -1}} )
+        .skip(skip)
+        .limit(limit)
         .populate({ path: 'uid', populate: {path: 'name'}})
 
         // .populate('uid', '_id name')
@@ -155,10 +153,11 @@ router.get("/fetchcurrent", async(req, res) => {
             return res.status(500).json({message: 'something went wrong', err})
         })
 
-    // console.log(result)
+        
     res.status(200).json({
         status: 200,
-        result
+        result,
+        totalResult
     })
 })
 

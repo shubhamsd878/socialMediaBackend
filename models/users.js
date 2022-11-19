@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const conn= require("../config/db")
+// const conn= require("../config/db")
 
 var userSchema = new mongoose.Schema( {
  
