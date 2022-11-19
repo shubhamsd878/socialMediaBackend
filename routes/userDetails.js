@@ -35,10 +35,10 @@ router.get('/name', (req, res) => {
 // -------------------------------------------------------------------------------------------------------
 router.get('/coverPic', (req, res) => {
     
-    console.log('hii')
+    // console.log('hii')
     
     const targetUid = req.headers.uid
-    console.log("hii from get cover, uid: ", targetUid)
+    // console.log("hii from get cover, uid: ", targetUid)
     if( !targetUid) return res.status(400).json({message:'no target uid'})
     userDetails.findById(targetUid, 'coverPic -_id', (err, response) => {
         if (err) return res.status(500).json({ message: 'something went wrong', err })
@@ -54,7 +54,7 @@ router.get('/profilePic', async (req, res) => {
 
     const targetUid = req.headers.uid
     if(!targetUid){
-        console.log('no target uid')
+        // console.log('no target uid')
         return res.status(400).json({message: 'no targetUid'})
     } 
     userDetails.find({_id: targetUid}, 'profilePic -_id', (err, response) => {
@@ -95,7 +95,7 @@ router.put('/profilePic', async (req, res) => {
     const auth = req.headers.authtoken
 
     if (!auth) {
-        console.log('no auth token')
+        // console.log('no auth token')
         return res.status(500).json({ message: "Invalid User" })
     }
 
@@ -104,11 +104,11 @@ router.put('/profilePic', async (req, res) => {
 
     
     if (!req.files.profilePic) {
-        console.log('no files selected')
+        // console.log('no files selected')
         return res.status(400).json({ message: 'no files selected' })
     }
 
-    console.log('file: ' + req.files.profilePic)
+    // console.log('file: ' + req.files.profilePic)
     
     var profilePicFile = req.files.profilePic
 
@@ -118,13 +118,13 @@ router.put('/profilePic', async (req, res) => {
         profilePic: profilePicBase64,
     }
 
-    console.log('uid: ', uid)
+    // console.log('uid: ', uid)
     userDetails.findByIdAndUpdate(uid, updateProfile, {upsert: true}, (err, response) => {
         if (err) {
             return res.status(500).json({message: 'something went wrong', err})
         }
         else {
-            console.log('profilePic updated Successfully')
+            // console.log('profilePic updated Successfully')
             return res.status(200).json({ message: 'Profile updated successfully', response })
         }
     })
@@ -144,7 +144,7 @@ router.put('/coverPic', async (req, res) => {
     const auth = req.headers.authtoken
 
     if (!auth) {
-        console.log('no auth token')
+        // console.log('no auth token')
         return res.status(500).json({ message: "Invalid User" })
     }
 
@@ -153,11 +153,11 @@ router.put('/coverPic', async (req, res) => {
 
     
     if (!req.files.coverPic) {
-        console.log('no files selected')
+        // console.log('no files selected')
         return res.status(400).json({ message: 'no files selected' })
     }
 
-    console.log('file: ' + req.files.coverPic)
+    // console.log('file: ' + req.files.coverPic)
     
     var coverPicFile = req.files.coverPic
 
@@ -167,13 +167,13 @@ router.put('/coverPic', async (req, res) => {
         coverPic: coverPicBase64,
     }
 
-    console.log('uid: ', uid)
+    // console.log('uid: ', uid)
     userDetails.findByIdAndUpdate(uid, updateProfile, {upsert: true}, (err, response) => {
         if (err) {
             return res.status(500).json({message: 'something went wrong', err})
         }
         else {
-            console.log('coverPic updated Successfully for ', uid)
+            // console.log('coverPic updated Successfully for ', uid)
             return res.status(200).json({ message: 'Profile updated successfully' })
         }
     })
@@ -189,7 +189,7 @@ router.put('/description', async (req, res) => {
     const auth = req.headers.authtoken
 
     if (!auth) {
-        console.log('no auth token')
+        // console.log('no auth token')
         return res.status(500).json({ message: "Invalid User" })
     }
 
@@ -198,24 +198,24 @@ router.put('/description', async (req, res) => {
 
     
     if (!req.fields.description) {
-        console.log('no description')
+        // console.log('no description')
         return res.status(400).json({ message: 'no description' })
     }
 
-    console.log('description: ' + req.fields.description)
+    // console.log('description: ' + req.fields.description)
     
     var description = req.fields.description
     let updateProfile = {
         description
     }
 
-    console.log('uid: ', uid)
+    // console.log('uid: ', uid)
     userDetails.findByIdAndUpdate(uid, updateProfile, {upsert: true}, (err, response) => {
         if (err) {
             return res.status(500).json({message: 'something went wrong', err})
         }
         else {
-            console.log('description updated Successfully for ', uid)
+            // console.log('description updated Successfully for ', uid)
             return res.status(200).json({ message: 'Profile updated successfully' })
         }
     })

@@ -10,7 +10,7 @@ router.get('/', (req, res)=> {
     users.find( { name: { $regex : new RegExp(a, "i") } } || { email: { $regex : new RegExp(a, "i") } }, (err, response)=> {
         if(err) return res.status(500).json({message:'something went wrong!', err})
 
-        console.log('a: ', a)
+        // console.log('a: ', a)
         return res.status(200).json({ message: 'success', response })
 
     } )

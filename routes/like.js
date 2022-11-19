@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {
     const auth = req.headers.authtoken
 
     if (!auth) {
-        console.log('no auth token from ')
+        // console.log('no auth token from ')
         return res.status(500).json({ message: "Invalid User" })
     }
 
@@ -40,7 +40,7 @@ router.delete('/', (req, res) => {
     const auth = req.headers.authtoken
 
     if (!auth) {
-        console.log('no auth token from ')
+        // console.log('no auth token from ')
         return res.status(500).json({ message: "Invalid User" })
     }
 
@@ -71,7 +71,7 @@ router.get('/', (req, res) => {
     likes.findById(pid, (err, resp) => {
         if(err) return res.status(500).json({ message: 'something went wrong', err })
 
-        console.log('resp: ', resp)
+        // console.log('resp: ', resp)
         if( resp )
             return res.status(200).json({message: 'like fetch successful', totalLikes: resp.users.length, users: resp.users})
         else 

@@ -21,7 +21,7 @@ router.post("/add", (req, res, next) => {
 
 
     if(!auth){
-        console.log('no auth token')
+        // console.log('no auth token')
         return res.status(500).json({message : "Invalid User"})
     }
 
@@ -75,10 +75,12 @@ router.post("/add", (req, res, next) => {
 // for fetching file of following
 router.get("/fetch", async(req, res) => {
     const auth = req.headers.authtoken
+    const skip = req.headers.skip
+    const limit = req.headers.limit
 
     
     if(!auth){
-        console.log('no auth token from ')
+        // console.log('no auth token from in post/add')
         return res.status(500).json({message : "Invalid User"})
     }
 
@@ -93,19 +95,27 @@ router.get("/fetch", async(req, res) => {
         return res.status(500).json({message:'something went wrong',err})
     })
 
+    // --------------Handling no frinds exceptions----------------------
+
     if(followingArr.length == 0) return res.status(200).json({message:'no friends of user',})
     
     followingArr = followingArr[0].following
     if(followingArr.length == 0) return res.status(200).json({message:'no friends of user',})
     
-    // -----------------------------------------------------------
 
-    // let result = await postSchema.find({uid: {$in: followingArr}} )
+    // -------------------------- Count Total Results ---------------------------------
+    
+    let totalResult = await postSchema.count({uid: {$in: followingArr}})
+        .catch(err => {
+            return res.status(500).json({message: 'something went wrong', err})
+        })    
+    
+    
+    // -------------------------- Fetching results with limit & skip ---------------------------------
     let result = await postSchema.find({uid: {$in: followingArr}}, {}, {sort: {date: -1}} )
-    .populate({ path: 'uid', populate: {path: 'name'}})
-
-        // .populate('uid', '_id name email')
-        // .populate('name', '-_id name')
+        .populate({ path: 'uid', populate: {path: 'name'}}) //              --> ******mongoose depth populate****** 
+        .skip(skip)
+        .limit(limit)
         .catch(err => {
             return res.status(500).json({message: 'something went wrong', err})
         })
@@ -113,9 +123,11 @@ router.get("/fetch", async(req, res) => {
     // console.log(result)
     res.status(200).json({
         status: 200,
-        result
+        result,
+        totalResult
     })
 })
+
 
 
 // for fetching file of current
@@ -124,7 +136,7 @@ router.get("/fetchcurrent", async(req, res) => {
 
     
     // if(!auth){
-    //     console.log('no auth token from ')
+        // console.log('no auth token from ')
     //     return res.status(500).json({message : "Invalid User"})
     // }
 

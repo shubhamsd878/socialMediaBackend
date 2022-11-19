@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
     const auth = req.headers.authtoken
 
     if(!auth){
-        console.log('no auth token')
+        // console.log('no auth token')
         return res.status(500).json({message : "Invalid User"})
     }
 
@@ -40,7 +40,7 @@ router.post('/', (req, res) => {
     const textComment = req.headers.comment;
 
     let date = new Date()
-    console.log(date)
+    // console.log(date)
     
     const newComment = comments({
         pid: pid,
