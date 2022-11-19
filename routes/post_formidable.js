@@ -17,6 +17,8 @@ router.use(formidable({
 
 
 router.post("/add", (req, res, next) => {
+    console.log(req.fields.location);
+    console.log(req.fields.description);
     const auth = req.headers.authtoken
 
 
@@ -37,6 +39,7 @@ router.post("/add", (req, res, next) => {
         console.log(req.files)
         console.log('upload a file')
         return res.status(501).json({message : false})
+
     }
 
     const date = new Date()
@@ -46,7 +49,8 @@ router.post("/add", (req, res, next) => {
         let post = new postSchema({
             uid: uid,
             file:img,
-            desc:req.fields.desc,
+            desc:req.fields.description,
+            location:req.fields.location,
             date: date
 
         });
