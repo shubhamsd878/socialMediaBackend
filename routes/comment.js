@@ -51,10 +51,9 @@ router.post('/', (req, res) => {
     
 
     newComment.save( (err, resp) => {
-        if( err) return res.status(500).json({messge: 'something went wrong', err})
+        if( err) return res.status(500).json({messge: false, err})
 
-        console.log('resp: ', resp)
-        return res.status(200).json({message: 'comment added successfully'})
+        return res.status(200).json({message:true})
     })
 
 })
