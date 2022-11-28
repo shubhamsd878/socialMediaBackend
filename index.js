@@ -15,6 +15,7 @@ const searchUser = require("./routes/searchUser");
 const userDetails = require('./routes/userDetails')
 const like = require('./routes/like')
 const comments = require('./routes/comment')
+const saved = require('./routes/saved')
 
 
 // app.set('trust proxy', 1) // trust first proxy
@@ -38,6 +39,7 @@ app.use('/search',searchUser )
 app.use('/userDetails', userDetails )
 app.use('/likes', like )
 app.use('/comments', comments)
+app.use('/saved', saved)
 
 
 

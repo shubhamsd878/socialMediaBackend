@@ -1,4 +1,3 @@
-// not fetching according to date
 const router = require("express").Router()
 let postSchema = require('../models/posts')
 const fs = require('fs')
