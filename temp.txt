@@ -1,0 +1,8 @@
+firebase login
+firebase login:ci
+
+firebase projects:list
+
+firebase init
+
+firebase deploy --only functions
