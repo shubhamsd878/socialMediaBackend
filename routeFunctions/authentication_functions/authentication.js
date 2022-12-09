@@ -27,7 +27,7 @@ const sign_up = (req, res) => {
         data.save((err, result) => {
             if (err) {
                 console.log(err);
-                res.status(404).json({ status: 404, message: 'something went wrong' })
+                res.status(404).json({ status: 404, message: false})
             }
             else {
                 // --saving name--
@@ -38,7 +38,7 @@ const sign_up = (req, res) => {
                 name.save((err, nameresult) => {
                     if(err){
                         console.log('something went wrong during saving name, err: ', err)
-                        return res.status(500).json({message: 'something went wrong', err})
+                        return res.status(500).json({message: false, err})
                     }
 
                     else{
@@ -49,7 +49,7 @@ const sign_up = (req, res) => {
                         //     console.log('result: ' + '')
                         //     res.status(200).json({ status: 200, message: resUserNameUpdate })
                         // })
-                        res.status(200).json({ message:'success signUp', result })
+                        res.status(200).json({ message:true, result })
                         
                     }
                 })
