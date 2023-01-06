@@ -11,7 +11,7 @@ route.post('/signup',user.sign_up)  // definiton is given at authentication.js
 route.post('/login',user.login) // definiton is given at authentication.js
 
 route.get('/logout',user.logOut)   //definition is given at authentication.js
-route.get('/verifier',user.verifier)  
+route.post('/updatePassword',user.updatePassword) 
 
 
 module.exports = route;

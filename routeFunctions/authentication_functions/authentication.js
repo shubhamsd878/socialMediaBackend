@@ -11,56 +11,63 @@ const jwt = require('jsonwebtoken')
 const jwt_secret = 'this is vipul, shubham secret'
 
 
-const sign_up = (req, res) => {
+const sign_up = async (req, res) => {
 
-    bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
-        var data = new userModel({
-            _id: new mongoose.Types.ObjectId,
-            name: req.body.name,
-            email: req.body.email,
-            password: hash,
+    // checking if already have an account
+    const r = await userModel.find({ email: req.body.email })
+    if (r.length < 1){
+
+        bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+            var data = new userModel({
+                _id: new mongoose.Types.ObjectId,
+                name: req.body.name,
+                email: req.body.email,
+                password: hash,
+            })
+
+
+            // logic to save names in another table: 
+            // first save user data, if(success) then save name in another table with same id, if(success) then update the name column of userTable 
+            data.save((err, result) => {
+                if (err) {
+                    console.log(err);
+                    res.status(404).json({ status: 404, message: 'something went wrong' })
+                }
+                else {
+                    // --saving name--
+                    var name = new namesModel({
+                        _id: result._id,
+                        name: req.body.name
+                    })
+                    name.save((err, nameresult) => {
+                        if (err) {
+                            console.log('something went wrong during saving name, err: ', err)
+                            return res.status(500).json({ message: 'something went wrong', err })
+                        }
+
+                        else {
+                            // console.log('nameresult: ', nameresult)
+                            // userModel.findByIdAndUpdate(result._id, {name: nameresult._id}, {upsert: true},(err, resUserNameUpdate) => {
+                            //     if(err) return res.status(500).json({message: 'something went wrong', err})
+
+                            //     console.log('result: ' + '')
+                            //     res.status(200).json({ status: 200, message: resUserNameUpdate })
+                            // })
+                            res.status(200).json({ message: 'signUp Successful', result })
+
+                        }
+                    })
+
+
+                }
+
+            })
+
+
         })
-
-
-        // logic to save names in another table: 
-        // first save user data, if(success) then save name in another table with same id, if(success) then update the name column of userTable 
-        data.save((err, result) => {
-            if (err) {
-                console.log(err);
-                res.status(404).json({ status: 404, message: 'something went wrong' })
-            }
-            else {
-                // --saving name--
-                var name = new namesModel({
-                    _id: result._id,
-                    name: req.body.name
-                })
-                name.save((err, nameresult) => {
-                    if(err){
-                        console.log('something went wrong during saving name, err: ', err)
-                        return res.status(500).json({message: 'something went wrong', err})
-                    }
-
-                    else{
-                        // console.log('nameresult: ', nameresult)
-                        // userModel.findByIdAndUpdate(result._id, {name: nameresult._id}, {upsert: true},(err, resUserNameUpdate) => {
-                        //     if(err) return res.status(500).json({message: 'something went wrong', err})
-
-                        //     console.log('result: ' + '')
-                        //     res.status(200).json({ status: 200, message: resUserNameUpdate })
-                        // })
-                        res.status(200).json({ message:'success signUp', result })
-                        
-                    }
-                })
-
-
-            }
-
-        })
-
-
-    })
+    }
+    else
+        res.status(201).json({ message: 'email already registered' })
 
 
 }
@@ -72,7 +79,7 @@ function isAuthenticated(req, res, next) {
 
 
 const login = (req, res) => {
-    const {email, password } = req.body;
+    const { email, password } = req.body;
     // console.log('email: ' + req.body.email + '\npassword: ' + req.body.password)
     // console.log('email: ' + email + '\npassword: ' + password)
 
@@ -95,7 +102,7 @@ const login = (req, res) => {
                         const token = jwt.sign(data, jwt_secret)
                         // console.log('token is: ',token )
 
-                        res.status(200).json({ status: 200, message:'succesful sign in', token, uid: result._id})
+                        res.status(200).json({ status: 200, message: 'succesful sign in', token, uid: result._id })
 
                         // req.session.user = req.body.username;
                         // const data = 
@@ -137,8 +144,33 @@ const logOut = (req, res) => {
 
 }
 
-const verifier = (req, res) => {
-    res.send(" show me your details..")
+const updatePassword = (req, res) => {
+    const auth = req.headers.authtoken
+    const newPassword = req.body.newPassword
+    console.log('newPassword: ' + newPassword)
+    console.log('auth: ' + auth)
+
+    if (!auth || !newPassword) {
+        // console.log('no auth token')
+        return res.status(500).json({ message: false, err: "authtoken or newPassword are invalid!" })
+    }
+
+    const decoded = jwt.decode(auth, jwt_secret)
+    const uid = decoded.id
+
+
+    bcrypt.hash(newPassword, saltRounds, function (err, hash) {
+        if (err) return res.status(500).json({ message: false, err })
+
+        userModel.findByIdAndUpdate(uid, { password: hash }, { upsert: true }, (errr, result) => {
+            if (err) return res.status(500).json({ message: false, errr })
+
+            res.status(200).json({ message: true, result })
+
+        })
+
+    })
+
 }
 
 module.exports = {
@@ -147,5 +179,5 @@ module.exports = {
     logOut,
     isAuthenticated,
     login2,
-    verifier
+    updatePassword
 }
