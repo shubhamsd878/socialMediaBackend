@@ -40,6 +40,10 @@ app.use('/likes', like )
 app.use('/comments', comments)
 app.use('/saved', saved)
 
+app.use('/',(req,res)=>{
+    res.send('Hello from SwagZinn server')
+})
+
 
 
 app.listen(3001,()=>{
