@@ -4,7 +4,6 @@ const app = express();
 const cors = require('cors')
 const bodyparser = require('body-parser')
 const dbConfig = require('./config/db')     //only need to import no need to call
-
 app.use(cors())     
 
 
